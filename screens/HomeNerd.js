@@ -9,24 +9,6 @@ const HomeNerd = () => {
 
   return (
     <View style={styles.homenerd}>
-      <View style={styles.barranotificaes}>
-        <Image
-          style={[styles.vectorIcon, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector.png")}
-        />
-        <Image
-          style={[styles.vectorIcon1, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector1.png")}
-        />
-        <Image
-          style={[styles.vectorIcon2, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector6.png")}
-        />
-        <Text style={styles.text}>19:30</Text>
-      </View>
       <Image
         style={[styles.vectorIcon3, styles.image32Position]}
         contentFit="cover"
@@ -62,7 +44,7 @@ const HomeNerd = () => {
         style={styles.botolateral}
         onPress={() => navigation.navigate("Perfil")}
       >
-        <View style={[styles.botolateralChild, styles.botolateralLayout]} />
+
         <View style={[styles.botolateralItem, styles.botolateralLayout]} />
       </Pressable>
       <Text style={[styles.lojas, styles.lojasTypo]}>Lojas</Text>
@@ -106,7 +88,7 @@ const HomeNerd = () => {
       >
         <View style={[styles.pikachuChild, styles.pikachuLayout]} />
         <Image
-          style={[styles.comboItem, styles.comboItemPosition]}
+          style={[styles.pikachuLayout, styles.comboItemPosition]}
           contentFit="cover"
         />
         <Text style={styles.pikachuDePelcia}>Combo de 37 jogos</Text>

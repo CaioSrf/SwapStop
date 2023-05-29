@@ -1,11 +1,16 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text, Pressable, CheckBox } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, Color, Border, FontSize } from "../GlobalStyles";
 
 const ComboEscPag = () => {
   const navigation = useNavigation();
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
 
   return (
     <View style={styles.comboescpag}>
@@ -15,24 +20,6 @@ const ComboEscPag = () => {
           Combo de 37 jogos
         </Text>
         <Text style={[styles.r400000, styles.textFlexBox]}>R$ 4000,00</Text>
-      </View>
-      <View style={styles.barranotificaes}>
-        <Image
-          style={[styles.vectorIcon, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector.png")}
-        />
-        <Image
-          style={[styles.vectorIcon1, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector1.png")}
-        />
-        <Image
-          style={[styles.vectorIcon2, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector6.png")}
-        />
-        <Text style={[styles.text, styles.textFlexBox]}>19:30</Text>
       </View>
       <Pressable
         style={styles.botovoltar}

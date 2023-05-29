@@ -9,24 +9,6 @@ const ComboDetalhes = () => {
 
   return (
     <View style={styles.combodetalhes}>
-      <View style={styles.barranotificaes}>
-        <Image
-          style={[styles.vectorIcon, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector.png")}
-        />
-        <Image
-          style={[styles.vectorIcon1, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector1.png")}
-        />
-        <Image
-          style={[styles.vectorIcon2, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector6.png")}
-        />
-        <Text style={styles.text}>19:30</Text>
-      </View>
       <View style={[styles.barrainferior, styles.barrainferiorLayout]}>
         <View style={[styles.barrainferiorChild, styles.barrainferiorLayout]} />
         <Text style={[styles.comboDe37, styles.avanarTypo]}>
@@ -230,8 +212,8 @@ const styles = StyleSheet.create({
     height: 42,
   },
   botoavanarItem: {
-    top: -3,
-    left: -3,
+    top: 3,
+    left: 3,
     borderStyle: "solid",
     borderColor: "#6f3e81",
     borderWidth: 3,
@@ -239,14 +221,14 @@ const styles = StyleSheet.create({
     height: 56,
   },
   avanar: {
-    left: 78,
+    left: 85,
     color: Color.white,
-    top: 10,
+    top: 15,
   },
   botoavanar: {
-    top: 719,
+    top: 419,
     left: 42,
-    width: 277,
+    width: 257,
     height: 59,
     position: "absolute",
   },

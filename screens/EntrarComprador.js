@@ -32,7 +32,7 @@ const EntrarComprador = () => {
       return;
     }
 
-    navigation.navigate("HomeNerd");
+    navigation.navigate("Home");
   };
 
   return (

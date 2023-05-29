@@ -3,12 +3,27 @@ import { Text, StyleSheet, Pressable, View, TextInput } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Cadastro = () => {
   const navigation = useNavigation();
+  const [nomeCompleto, setNomeCompleto] = useState("");
+  const [email, setEmail] = useState("");
+  const [numero, setNumero] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+
+  const handleCadastro = () => {
+    if (isFormValid()) {
+      console.log("Formulário válido. Realizar cadastro.");
+    } else {
+      console.log("Preencha todos os campos para continuar.");
+    }
+  };
 
   return (
-    
+    <ScrollView contentContainerStyle={styles.scrollViewContent}>
     <View style={styles.cadastro}>
       <Image
         style={styles.logoIcon}
@@ -77,7 +92,9 @@ const Cadastro = () => {
         <View
           style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
         />
-        <TextInput style={styles.input} placeholder="Confirme sua senha" secureTextEntry={true} />
+        <TextInput style={styles.input} 
+        placeholder="Confirme sua senha"
+         secureTextEntry={true} />
 
         <Image
           style={styles.visualyImpairedIcon}
@@ -86,10 +103,14 @@ const Cadastro = () => {
         />
       </View>
     </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollViewContent: {
+    flexGrow: 1,
+  },
   textFlexBox: {
     alignItems: "center",
     display: "flex",
@@ -295,7 +316,6 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 60,
-    borderWidth: 1,
     paddingHorizontal: 20,
   },
 });
