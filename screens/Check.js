@@ -1,18 +1,31 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { Border, Color } from "../GlobalStyles";
+import Icon from '@expo/vector-icons/FontAwesome';
+import { useNavigation } from "@react-navigation/core";
+
+const SCREEN = Dimensions.get('screen')
 
 const Check = () => {
+  const navigation = useNavigation();
+
+  function handleNavigate() {
+    navigation.navigate('StackHome')
+  }
+
+  React.useEffect(() => {
+    const timiout = setTimeout(() => {
+      handleNavigate()
+    }, 1000)
+    return () => clearTimeout(timiout);
+  }, [])
+
   return (
     <View style={styles.check}>
-      <Image
-        style={styles.checkChild}
-        contentFit="cover"
-        source={require("../assets/ellipse-20.png")}
-      />
-      <View style={[styles.checkItem, styles.checkLayout]} />
-      <View style={[styles.checkInner, styles.checkLayout]} />
+      <Pressable onPress={handleNavigate}>
+        <Icon name="check-circle" size={SCREEN.width * 0.7} color={Color.darkviolet} />
+      </Pressable>
     </View>
   );
 };
@@ -48,10 +61,9 @@ const styles = StyleSheet.create({
   },
   check: {
     flex: 1,
-    width: "100%",
-    height: 800,
-    overflow: "hidden",
     backgroundColor: Color.white,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

@@ -1,9 +1,10 @@
-import * as React from "react";
-import { Text, StyleSheet, Pressable, View, TextInput } from "react-native";
+import React, { useState } from "react";
+import { Text, StyleSheet, Pressable, View, TextInput, Alert } from "react-native";
 import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { ScrollView } from "react-native-gesture-handler";
+import { signup } from '../firebase-helpers/auth/signup'
 
 const Cadastro = () => {
   const navigation = useNavigation();
@@ -13,96 +14,151 @@ const Cadastro = () => {
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const route = useRoute();
+  const params = route.params;
+
+  function isFormValid() {
+    if (
+      !nomeCompleto ||
+      !email ||
+      !numero ||
+      !senha ||
+      !confirmarSenha) {
+
+      Alert.alert('Cadatro', 'Preencha todos os campos.');
+      return false;
+    }
+
+    if (senha !== confirmarSenha) {
+      Alert.alert('Cadatro', 'senhas diferentes.');
+      return false;
+    }
+
+    return true;
+  }
 
   const handleCadastro = () => {
-    if (isFormValid()) {
-      console.log("Formulário válido. Realizar cadastro.");
-    } else {
-      console.log("Preencha todos os campos para continuar.");
+    const isValid = isFormValid()
+
+    if (!isValid) {
+      return;
     }
+
+    signup({
+      email,
+      password: senha,
+      name: nomeCompleto,
+      number: numero,
+      type: params?.type ?? 'comprador'
+    });
+
   };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
-    <View style={styles.cadastro}>
-      <Image
-        style={styles.logoIcon}
-        contentFit="cover"
-        source={require("../assets/logo.png")}
-      />
-      <Pressable
-        style={styles.vocJTemContainer}
-        onPress={() => navigation.navigate("EntrarComprador")}
-      >
-        <Text style={[styles.text, styles.textFlexBox]}>
-          <Text style={styles.vocJTemContainer1}>
-            <Text style={styles.vocJTem}>{`Você já tem uma conta? `}</Text>
-            <Text style={styles.entrar}>Entrar</Text>
+      <View style={styles.cadastro}>
+        <Image
+          style={styles.logoIcon}
+          contentFit="cover"
+          source={require("../assets/logo.png")}
+        />
+        <Pressable
+          style={styles.vocJTemContainer}
+          onPress={() => navigation.navigate("EntrarComprador")}
+        >
+          <Text style={[styles.text, styles.textFlexBox]}>
+            <Text style={styles.vocJTemContainer1}>
+              <Text style={styles.vocJTem}>{`Você já tem uma conta? `}</Text>
+              <Text style={styles.entrar}>Entrar</Text>
+            </Text>
           </Text>
+        </Pressable>
+        <Pressable
+          style={styles.botocomecar}
+          onPress={handleCadastro}
+        >
+          <View style={[styles.botaocomecarChild, styles.botaocomecarBg]} />
+          <View style={[styles.botaocomecarItem, styles.botaocomecarBg]} />
+          <Text style={[styles.criarConta, styles.criarContaTypo]}>
+            CRIAR CONTA
+          </Text>
+        </Pressable>
+        <Text style={[styles.vamosRealizarO, styles.criarContaTypo]}>
+          Vamos realizar o cadastro?
         </Text>
-      </Pressable>
-      <Pressable
-        style={styles.botocomecar}
-        onPress={() => navigation.navigate("EntrarComprador")}
-      >
-        <View style={[styles.botaocomecarChild, styles.botaocomecarBg]} />
-        <View style={[styles.botaocomecarItem, styles.botaocomecarBg]} />
-        <Text style={[styles.criarConta, styles.criarContaTypo]}>
-          CRIAR CONTA
-        </Text>
-      </Pressable>
-      <Text style={[styles.vamosRealizarO, styles.criarContaTypo]}>
-        Vamos realizar o cadastro?
-      </Text>
 
-      <View style={[styles.nomecompleto, styles.confirmarsenhaLayout]}>
-      <View
-          style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
-        />
-        <TextInput style={styles.input} placeholder="Digite seu nome completo" />
+        <View style={[styles.nomecompleto, styles.confirmarsenhaLayout]}>
+          <View
+            style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Digite seu nome completo"
+            value={nomeCompleto}
+            onChangeText={setNomeCompleto}
+            autoCapitalize="none"
+          />
+        </View>
+
+
+        <View style={[styles.eMail, styles.confirmarsenhaLayout]}>
+          <View
+            style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
+          />
+          <TextInput style={styles.input} placeholder="Digite seu email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+        </View>
+
+        <View style={[styles.numero, styles.confirmarsenhaLayout]}>
+          <View
+            style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Digite seu número"
+            value={numero}
+            onChangeText={setNumero}
+          />
+        </View>
+
+        <View style={[styles.senha, styles.confirmarsenhaLayout]}>
+          <View
+            style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Digite sua senha"
+            secureTextEntry={!mostrarSenha}
+            value={senha}
+            onChangeText={setSenha}
+          />
+          <Image
+            style={styles.visualyImpairedIcon}
+            contentFit="cover"
+            source={require("../assets/visualy-impaired.png")}
+          />
+        </View>
+        <View style={[styles.confirmarsenha, styles.confirmarsenhaLayout]}>
+          <View
+            style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
+          />
+          <TextInput style={styles.input}
+            placeholder="Confirme sua senha"
+            secureTextEntry={!mostrarSenha}
+            value={confirmarSenha}
+            onChangeText={setConfirmarSenha}
+          />
+
+          <Image
+            style={styles.visualyImpairedIcon}
+            contentFit="cover"
+            source={require("../assets/visualy-impaired.png")}
+          />
+        </View>
       </View>
-
-
-      <View style={[styles.eMail, styles.confirmarsenhaLayout]}>
-        <View
-          style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
-        />
-        <TextInput style={styles.input} placeholder="Digite seu email" />
-      </View>
-
-      <View style={[styles.numero, styles.confirmarsenhaLayout]}>
-        <View
-          style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
-        />
-        <TextInput style={styles.input} placeholder="Digite seu número" />
-      </View>
-
-      <View style={[styles.senha, styles.confirmarsenhaLayout]}>
-        <View
-          style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
-        />
-        <TextInput style={styles.input} placeholder="Digite sua senha" secureTextEntry={true} />
-        <Image
-          style={styles.visualyImpairedIcon}
-          contentFit="cover"
-          source={require("../assets/visualy-impaired.png")}
-        />
-      </View>
-      <View style={[styles.confirmarsenha, styles.confirmarsenhaLayout]}>
-        <View
-          style={[styles.confirmarsenhaChild, styles.confirmarsenhaLayout]}
-        />
-        <TextInput style={styles.input} 
-        placeholder="Confirme sua senha"
-         secureTextEntry={true} />
-
-        <Image
-          style={styles.visualyImpairedIcon}
-          contentFit="cover"
-          source={require("../assets/visualy-impaired.png")}
-        />
-      </View>
-    </View>
     </ScrollView>
   );
 };

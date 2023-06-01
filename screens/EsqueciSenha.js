@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, Pressable, ScrollView, TextInput } from "react-
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Border, FontFamily, Color, FontSize } from "../GlobalStyles";
+import { resetPassword } from '../firebase-helpers/auth/resetPassword'
 
 const EsqueciSenha = () => {
   const navigation = useNavigation();
@@ -10,8 +11,9 @@ const EsqueciSenha = () => {
   const isEmailValid = email.includes("@");
 
   const handlePress = () => {
-    if (isEmailValid) {
-      navigation.navigate("VendedorComprador");
+    const success = resetPassword(email);
+    if(success) {
+      navigation.goBack();
     }
   };
 

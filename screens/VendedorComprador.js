@@ -7,11 +7,15 @@ import { FontFamily, Color, Border, FontSize } from "../GlobalStyles";
 const VendedorComprador = () => {
   const navigation = useNavigation();
 
+  function handleNavigate(type) {
+    navigation.navigate("Entrar", { type })
+  }
+
   return (
     <View style={styles.vendedorcomprador}>
       <Pressable
         style={[styles.vendedor, styles.vendedorPosition]}
-        onPress={() => navigation.navigate("EntrarVendedor")}
+        onPress={() => handleNavigate("vendedor")}
       >
         <View style={styles.vendedorChild} />
         <View style={styles.vendedorItem} />
@@ -19,7 +23,7 @@ const VendedorComprador = () => {
       </Pressable>
       <Pressable
         style={[styles.comprador, styles.vendedorPosition]}
-        onPress={() => navigation.navigate("EntrarComprador")}
+        onPress={() => handleNavigate('comprador')}
       >
         <View style={styles.vendedorChild} />
         <View style={styles.vendedorItem} />

@@ -1,60 +1,104 @@
 import * as React from "react";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View, Pressable } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontFamily, FontSize } from "../GlobalStyles";
+import { FlatList } from "react-native-gesture-handler";
+import { data } from "../data/data";
+import { listenPurchases } from "../firebase-helpers/purchases/listPurchases";
+import { handleImage } from "../utils/handleImage";
 
 const Histrico = () => {
-  const navigation = useNavigation();
+  const [purchases, setPurchases] = React.useState([]);
+  const lojas = data.shops;
+
+  React.useEffect(() => {
+    const unsubscribe = listenPurchases((fetchedPurchases) => {
+      setPurchases(fetchedPurchases);
+    })
+
+    return () => unsubscribe();
+  }, [])
 
   return (
-    <View style={styles.histrico}>
-      <View style={styles.barranotificaes}>
-        <Image
-          style={[styles.vectorIcon, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector.png")}
-        />
-        <Image
-          style={[styles.vectorIcon1, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector1.png")}
-        />
-        <Image
-          style={[styles.vectorIcon2, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector6.png")}
-        />
-        <Text style={styles.text}>19:30</Text>
-      </View>
-      <Pressable
-        style={styles.botovoltar}
-        onPress={() => navigation.navigate("HomeNerd")}
-      >
-        <View style={[styles.botovoltarChild, styles.botovoltarLayout]} />
-        <View style={[styles.botovoltarItem, styles.botovoltarLayout]} />
-      </Pressable>
-      <Text style={[styles.histricoDeCompra, styles.histricoTypo]}>
+    <View style={styles.container}>
+      <Text style={styles.title}>
         Histórico de Compra
       </Text>
-      <Image
-        style={styles.shoppingCartIcon}
-        contentFit="cover"
-        source={require("../assets/shopping-cart1.png")}
-      />
-      <Text style={[styles.seuHistricoEst, styles.histricoTypo]}>
-        Seu histórico está vazio
-      </Text>
+
+      <View style={styles.content}>
+        <FlatList
+          data={purchases}
+          renderItem={({ item }) => (
+            <View key={item?.id} style={styles.card}>
+              <Image
+                source={handleImage(item?.productId)}
+                style={styles.cardImage}
+                contentFit="cover"
+              />
+              <View style={{ alignItems: 'flex-end', }}>
+                <Text style={{ color: Color.black, fontSize: 20 }}>
+                  {item?.productName}
+                </Text>
+                <Text style={{ color: Color.black, fontSize: 14 }}>
+                  {item?.paymentMethod}
+                </Text>
+                <Text style={{ color: Color.black, fontSize: 24 }}>
+                  R$ {item?.price}
+                </Text>
+              </View>
+            </View>
+          )}
+          ListEmptyComponent={
+            <View style={styles.container}>
+              <Image
+                style={styles.shoppingCartIcon}
+                contentFit="cover"
+                source={require("../assets/shopping-cart1.png")}
+              />
+              <Text style={styles.title}>
+                Seu histórico está vazio
+              </Text>
+            </View>
+          }
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  content: {
+    padding: 20,
+    paddingTop: 30,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 12,
+    borderRadius: 20,
+    marginBottom: 12,
+    backgroundColor: Color.thistle,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
+  },
+  cardImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+  },
   vectorIconLayout: {
     maxHeight: "100%",
     maxWidth: "100%",
     width: "5.49%",
-    position: "absolute",
     overflow: "hidden",
   },
   botovoltarLayout: {
@@ -67,7 +111,13 @@ const styles = StyleSheet.create({
     width: 20,
     backgroundColor: Color.darkviolet,
     borderRadius: Border.br_7xs,
-    position: "absolute",
+  },
+  title: {
+    fontFamily: FontFamily.redHatTextBold,
+    fontSize: 22,
+    textAlign: "center",
+    color: Color.black,
+    fontWeight: "700",
   },
   histricoTypo: {
     fontFamily: FontFamily.redHatTextBold,
@@ -75,7 +125,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: Color.black,
     fontWeight: "700",
-    position: "absolute",
   },
   vectorIcon: {
     top: "6.67%",
@@ -114,7 +163,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: Color.black,
     fontWeight: "700",
-    position: "absolute",
   },
   barranotificaes: {
     height: "1.88%",
@@ -123,7 +171,6 @@ const styles = StyleSheet.create({
     right: "5%",
     bottom: "96.5%",
     left: "5.56%",
-    position: "absolute",
   },
   botovoltarChild: {
     top: 10,
@@ -138,29 +185,26 @@ const styles = StyleSheet.create({
     left: 34,
     width: 18,
     height: 28,
-    position: "absolute",
   },
   histricoDeCompra: {
     top: 71,
     left: 90,
   },
   shoppingCartIcon: {
-    top: 243,
-    left: 94,
+    alignSelf: "center",
+    marginTop: 80,
     width: 172,
     height: 172,
-    position: "absolute",
+    marginBottom: 20
   },
   seuHistricoEst: {
     top: 442,
     left: 51,
   },
-  histrico: {
+  container: {
     backgroundColor: Color.white,
     flex: 1,
-    width: "100%",
-    height: 800,
-    overflow: "hidden",
+    paddingTop: 40,
   },
 });
 

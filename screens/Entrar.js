@@ -2,33 +2,37 @@ import * as React from "react";
 import { useState } from "react";
 import { Text, StyleSheet, Pressable, View, TextInput, TouchableOpacity, ScrollView, SafeAreaView } from "react-native";
 import { Image } from "expo-image";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Color, Border, FontSize, FontFamily } from "../GlobalStyles";
+import { AuthContext } from "../context/AuthContext";
 
-const EntrarComprador = () => {
+export const Entrar = () => {
   const navigation = useNavigation();
+  const { handleSignIn } = React.useContext(AuthContext);
   const [MostrarSenha, setMostrarSenha] = useState(false);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const route = useRoute();
+  const params = route.params;
 
-  const isEmailValid = () => {
-    return (
-      email !== "" && (email.includes("@hotmail") || email.includes("@gmail"))
-    );
-  };
 
   const isFormComplete = () => {
     return email !== "" && senha !== "";
   };
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!isFormComplete()) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
-
-    navigation.navigate("Home");
+    handleSignIn(email, senha);
   };
+
+  function navigateSignup() {
+    navigation.navigate("Cadastro", {
+      type: params?.type
+    })
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -36,7 +40,7 @@ const EntrarComprador = () => {
         <View style={styles.entrarvendedor}>
           <Pressable
             style={styles.crieUmaContaContainer}
-            onPress={() => navigation.navigate("Cadastro")}
+            onPress={navigateSignup}
           >
             <Text style={styles.textTypo}>
               <Text style={styles.crieUma}>{`Crie uma `}</Text>
@@ -71,6 +75,8 @@ const EntrarComprador = () => {
               style={[styles.input, styles.senha1, styles.text1Typo]}
               placeholder="E-mail"
               onChangeText={(text) => setEmail(text)}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
           </View>
 
@@ -100,13 +106,6 @@ const EntrarComprador = () => {
             source={require("../assets/vector9.png")}
           />
 
-          <Pressable
-            style={styles.botaovoltar}
-            onPress={() => navigation.navigate("VendedorComprador")}
-          >
-            <View style={[styles.botaovoltarChild, styles.botaovoltarLayout]} />
-            <View style={[styles.botaovoltarItem, styles.botaovoltarLayout]} />
-          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -142,6 +141,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontWeight: "700",
     position: "absolute",
+    width: 300,
   },
   vectorIconLayout: {
     maxHeight: "100%",
@@ -284,4 +284,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EntrarComprador;

@@ -9,29 +9,12 @@ const NotificaesVendedor = () => {
 
   return (
     <View style={styles.notificaesvendedor}>
-      <View style={styles.barranotificaes}>
-        <Image
-          style={[styles.vectorIcon, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector.png")}
-        />
-        <Image
-          style={[styles.vectorIcon1, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector1.png")}
-        />
-        <Image
-          style={[styles.vectorIcon2, styles.vectorIconLayout]}
-          contentFit="cover"
-          source={require("../assets/vector6.png")}
-        />
-        <Text style={styles.text}>19:30</Text>
-      </View>
+
       <Pressable
         style={styles.botovoltar}
-        onPress={() => navigation.navigate("HomeVendedor")}
+        onPress={() => navigation.goBack()}
       >
-        <View style={[styles.botovoltarChild, styles.botovoltarLayout]} />
+        <View style={[styles.botovoltarChild, styles.botovoltarLayout1]} />
         <View style={[styles.botovoltarItem, styles.botovoltarLayout]} />
       </Pressable>
       <Text style={[styles.suasNotificaes, styles.vocNoTemTypo]}>
@@ -61,6 +44,24 @@ const styles = StyleSheet.create({
     transform: [
       {
         rotate: "45deg",
+      },
+    ],
+    height: 6,
+    width: 20,
+    backgroundColor: Color.darkviolet,
+    borderRadius: Border.br_7xs,
+    position: "absolute",
+  },
+  botovoltarLayout1: {
+    transform: [
+      {
+        rotate: "-45deg",
+      },
+      {
+        translateY: -8,
+      },
+      {
+        translateX: 2,
       },
     ],
     height: 6,
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
   },
   vocNoTem: {
     top: 458,
-    left: 36,
+    left: 46,
   },
   notificaesvendedor: {
     backgroundColor: Color.white,

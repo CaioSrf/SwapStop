@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontFamily, FontSize, Color, Border } from "../GlobalStyles";
 
-const AdicionarProduto = () => {
+const AdicionarProduto = ({close}) => {
   const navigation = useNavigation();
   const [nomeProduto, setNomeProduto] = useState("");
   const [descricaoProduto, setDescricaoProduto] = useState("");
@@ -18,18 +18,14 @@ const AdicionarProduto = () => {
 
   return (
     <View style={styles.adicionarproduto}>
-      <Image
-        style={[styles.vectorIcon3, styles.vectorIcon3Layout]}
-        contentFit="cover"
-        source={require("../assets/vector8.png")}
-      />
+
       <View style={[styles.barrainferior, styles.barrainferiorPosition]}>
         <View
           style={[styles.barrainferiorChild, styles.barrainferiorPosition]}
         />
         <Pressable
           style={[styles.puxadorinferior, styles.vectorIcon3Layout]}
-          onPress={() => navigation.navigate("HomeVendedor")}
+          onPress={close}
         >
           <Image
             style={styles.icon}
@@ -83,13 +79,13 @@ const AdicionarProduto = () => {
           contentFit="cover"
           source={require("../assets/photo-camera-interface-symbol-for-button.png")}
         />
-        <View
-          style={[styles.barrainferiorChild4, styles.barrainferiorChildBg]}
-        />
+        <Pressable>
         <View
           style={[styles.barrainferiorChild5, styles.barrainferiorChildBg]}
         />
         <Text style={[styles.postar, styles.rTypo]}>POSTAR</Text>
+        </Pressable>
+        
       </View>
     </View>
   );
@@ -272,14 +268,8 @@ const styles = StyleSheet.create({
     width: 28,
     position: "absolute",
   },
-  barrainferiorChild4: {
-    top: 642,
-    left: 80,
-    width: 199,
-    height: 41,
-  },
   barrainferiorChild5: {
-    top: 624,
+    top: 604,
     left: 57,
     borderColor: "#5d5d5d",
     borderWidth: 3,
@@ -289,14 +279,11 @@ const styles = StyleSheet.create({
     backgroundColor: Color.darkgray_200,
   },
   postar: {
-    top: 633,
+    top: 612,
     left: 128,
     color: Color.white,
   },
-  barrainferior: {
-    top: 71,
-    height: 715,
-  },
+
   adicionarproduto: {
     flex: 1,
     height: 800,
