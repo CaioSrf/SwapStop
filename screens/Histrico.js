@@ -1,15 +1,24 @@
 import * as React from "react";
 import { Image } from "expo-image";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from "react-native";
 import { Color, Border, FontFamily, FontSize } from "../GlobalStyles";
 import { FlatList } from "react-native-gesture-handler";
-import { data } from "../data/data";
 import { listenPurchases } from "../firebase-helpers/purchases/listPurchases";
 import { handleImage } from "../utils/handleImage";
+import FaIcon from '@expo/vector-icons/FontAwesome';
+import { deletePurchase } from "../firebase-helpers/purchases/deletePurchase";
+
+const WIDTH = Dimensions.get('screen').width;
+
+const CONTENT_WIDTH = WIDTH - 20 * 2 - 12 * 2;
+const TEXT_WIDTH = CONTENT_WIDTH - 100 - 50;
 
 const Histrico = () => {
   const [purchases, setPurchases] = React.useState([]);
-  const lojas = data.shops;
+  
+  function handleDeletePurchase(id) {
+    deletePurchase(id)
+  }
 
   React.useEffect(() => {
     const unsubscribe = listenPurchases((fetchedPurchases) => {
@@ -35,16 +44,22 @@ const Histrico = () => {
                 style={styles.cardImage}
                 contentFit="cover"
               />
-              <View style={{ alignItems: 'flex-end', }}>
-                <Text style={{ color: Color.black, fontSize: 20 }}>
-                  {item?.productName}
-                </Text>
-                <Text style={{ color: Color.black, fontSize: 14 }}>
-                  {item?.paymentMethod}
-                </Text>
-                <Text style={{ color: Color.black, fontSize: 24 }}>
-                  R$ {item?.price}
-                </Text>
+              <View style={{ flexDirection: "row", alignItems: 'center', gap: 10 }}>
+                <View style={{ alignItems: 'flex-end', }}>
+                  <Text style={{ color: Color.black, fontSize: 20, width: TEXT_WIDTH, paddingHorizontal: 4 }} numberOfLines={1}>
+                    {item?.productName}
+                    {item?.productName}
+                  </Text>
+                  <Text style={{ color: Color.black, fontSize: 14 }}>
+                    {item?.paymentMethod}
+                  </Text>
+                  <Text style={{ color: Color.black, fontSize: 24 }}>
+                    R$ {item?.price}
+                  </Text>
+                </View>
+                <TouchableOpacity style={{ padding: 8 }} onPress={() => handleDeletePurchase(item?.id)}>
+                  <FaIcon name="trash" size={20} />
+                </TouchableOpacity>
               </View>
             </View>
           )}
